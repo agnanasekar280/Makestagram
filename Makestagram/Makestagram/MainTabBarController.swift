@@ -11,9 +11,16 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
+    // MARK: - Properties
+    
+    let photoHelper = MGPhotoHelper()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        photoHelper.completionHandler = { image in
+            PostService.create(for: image)
+        }
         // 1
         delegate = self
         // 2
@@ -24,12 +31,9 @@ class MainTabBarController: UITabBarController {
 extension MainTabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController.tabBarItem.tag == 1 {
-            // present photo taking action sheet
-            print("take photo")
-            
+            photoHelper.presentActionSheet(from: self)
             return false
-        } else {
-            return true
         }
+            return true
     }
 }
